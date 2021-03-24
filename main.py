@@ -1,18 +1,20 @@
 import numpy as np 
 from numpy import random
 import matplotlib.pyplot as plt
-from collision import collisionWall
+from collision import collisionWall, collisionParticles
 import time
 
 
 # Declare some values.
-N = 1000 # Number of particles.
+N = 100 # Number of particles.
 N_dim = 3 # Number of dimensions.
 box_side = 2 # Side length of box.
 v0 = 1 # Velocity scale factor.
 dt = 0.02 # Time step.
 T = 1 # Total simulation time.
 N_it = int(T/dt) # Number of iteration steps.
+radius = 0.1 # Radius of each particle 
+               # (should be much smaller than ((box_side**3)/N)**(1/3)).
 
 # Random array of initial particle positions,
 # such that particles lie within box centred at (0,0,0).
@@ -49,10 +51,13 @@ ax.plot(x[:,0], x[:,1], 'ko', ms = 2.0)
 
 tic = time.process_time() # For timing calculation time.
 
-# Calculate subsequent positions and velocities.
+# Check if there are any collisions, then calculate new velocities.
+# Then calculate subsequent positions after time dt.
 for i in range(N_it):
-    x = updatePositions(x, v, dt)
+    v = collisionParticles(x, v, radius)
     v = collisionWall(x, v, box_side)
+    x = updatePositions(x, v, dt)
+    
 
 
 toc = time.process_time()
