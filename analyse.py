@@ -15,4 +15,4 @@ def calculateKineticEnergy(v):
     scalar (float) energy
     """
 
-    return 0.5 * np.sum(np.linalg.norm(v, axis=1))
+    return 0.5 * np.sum(np.linalg.norm(v, axis=1)**2)
